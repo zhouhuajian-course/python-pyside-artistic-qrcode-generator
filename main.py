@@ -44,6 +44,7 @@ class ArtisticQrcodeGenerator(QWidget):
             self.ui.backgroundImageLabel.setMovie(movie)
             movie.start()
 
+
 if __name__ == '__main__':
     # 应用
     app = QApplication()
