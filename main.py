@@ -9,6 +9,8 @@ from PySide6.QtWidgets import QWidget, QApplication, QFileDialog
 
 from main_window_ui import Ui_MainWindow
 
+from amzqr import amzqr
+
 
 class ArtisticQrcodeGenerator(QWidget):
     """艺术二维码生成器"""
@@ -21,6 +23,23 @@ class ArtisticQrcodeGenerator(QWidget):
 
         self.ui.backgroundImageLabel.mousePressEvent = self.changeBackgroundImage
         self.backgroundImagePath = "images/default_background.png"
+
+        self.ui.pushButton.clicked.connect(self.createQrcode)
+
+    def createQrcode(self):
+        """创建二维码"""
+        print("开始创建二维码")
+
+        r = amzqr.run(
+            self.ui.plainTextEdit.toPlainText(),
+            version=10,
+            picture=self.backgroundImagePath,
+            colorized=True,
+            save_name="临时二维码." + self.backgroundImagePath[-3:],
+            save_dir="./temp"
+        )
+        # print(self.ui.plainTextEdit.toPlainText(), r)
+        qrcodePath = r[2]
 
     def changeBackgroundImage(self, mouseEvent: QMouseEvent):
         """修改背景图片"""
