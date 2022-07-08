@@ -5,7 +5,7 @@
 @version : v1.0
 """
 from PySide6.QtGui import QMouseEvent, Qt, QPixmap, QMovie
-from PySide6.QtWidgets import QWidget, QApplication, QFileDialog
+from PySide6.QtWidgets import QWidget, QApplication, QFileDialog, QMessageBox
 
 from main_window_ui import Ui_MainWindow
 
@@ -26,20 +26,35 @@ class ArtisticQrcodeGenerator(QWidget):
 
         self.ui.pushButton.clicked.connect(self.createQrcode)
 
+        self.qrcodePath = "images/default_qrcode.png"
+
     def createQrcode(self):
         """创建二维码"""
         print("开始创建二维码")
+        try:
+            r = amzqr.run(
+                self.ui.plainTextEdit.toPlainText(),
+                version=10,
+                picture=self.backgroundImagePath,
+                colorized=True,
+                save_name="临时二维码." + self.backgroundImagePath[-3:],
+                save_dir="./temp"
+            )
+            # print(self.ui.plainTextEdit.toPlainText(), r)
+            self.qrcodePath = r[2]
 
-        r = amzqr.run(
-            self.ui.plainTextEdit.toPlainText(),
-            version=10,
-            picture=self.backgroundImagePath,
-            colorized=True,
-            save_name="临时二维码." + self.backgroundImagePath[-3:],
-            save_dir="./temp"
-        )
-        # print(self.ui.plainTextEdit.toPlainText(), r)
-        qrcodePath = r[2]
+            # 静态图片
+            if self.qrcodePath[-3:] != 'gif':
+                self.ui.qrcodeLabel.setPixmap(QPixmap(self.qrcodePath))
+            else:
+                movie = QMovie(self.qrcodePath)
+                self.ui.qrcodeLabel.setMovie(movie)
+                movie.start()
+        except Exception as e:
+            error_message = str(e)
+            if error_message == 'Wrong words! Make sure the characters are supported!':
+                error_message = "创建失败，目前只支持以下字符\n" + r"0-9 A-Z a-z ··,.:;+-*/\~!@#$%^&`'=<>[]()?_{}|"
+            QMessageBox.critical(self, "创建失败", error_message)
 
     def changeBackgroundImage(self, mouseEvent: QMouseEvent):
         """修改背景图片"""

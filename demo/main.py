@@ -73,10 +73,11 @@ class ArtisticQrcodeGenerator(QWidget):
                 self.ui.qrcodeLabel.setMovie(movie)
                 movie.start()
         except Exception as e:
-            error = str(e)
-            if error.startswith("Wrong words!"):
-                error = "您输入了" + repr(words) + "，但目前仅支持以下字符\n0-9 A-Z a-z ·,.:;+-*/\~!@#$%^&`'=<>[]()?_{}|"
-            QMessageBox.critical(self, "二维码创建失败", error)
+            error_message = str(e)
+            if error_message == 'Wrong words! Make sure the characters are supported!':
+                error_message = "你输入了'" + words + "'，但目前只支持以下字符\n" + r"0-9 A-Z a-z ··,.:;+-*/\~!@#$%^&`'=<>[]()?_{}|"
+            QMessageBox.critical(self, "创建失败", error_message)
+
 
     def saveQrcode(self, mouseEvent: QMouseEvent):
         """二维码标签鼠标按下事件"""
