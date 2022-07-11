@@ -87,7 +87,7 @@ class ArtisticQrcodeGenerator(QWidget):
         r = QFileDialog.getSaveFileName(parent=self,
                                         caption="保存二维码",
                                         dir=f'二维码{time.strftime("%Y%m%d_%H%M%S")}.{ext}',
-                                        filter=f"图片 (*{ext})")
+                                        filter=f"图片 (*.{ext})")
         imagePath = r[0]
         if not imagePath:
             return
