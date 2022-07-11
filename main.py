@@ -18,14 +18,15 @@ class ArtisticQrcodeGenerator(QWidget):
     def __init__(self):
         """初始化"""
         super().__init__()
+        # 主界面UI
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-
+        # 修改背景图片
         self.ui.backgroundImageLabel.mousePressEvent = self.changeBackgroundImage
         self.backgroundImagePath = "images/default_background.png"
-
+        # 创建二维码
         self.ui.pushButton.clicked.connect(self.createQrcode)
-
+        # 保存二维码
         self.qrcodePath = "images/default_qrcode.png"
 
     def createQrcode(self):
@@ -40,7 +41,6 @@ class ArtisticQrcodeGenerator(QWidget):
                 save_name="临时二维码." + self.backgroundImagePath[-3:],
                 save_dir="./temp"
             )
-            # print(self.ui.plainTextEdit.toPlainText(), r)
             self.qrcodePath = r[2]
 
             # 静态图片
@@ -63,7 +63,6 @@ class ArtisticQrcodeGenerator(QWidget):
         r = QFileDialog.getOpenFileName(parent=self,
                                         caption="选择背景图片",
                                         filter="图片 (*.jpg *.png *.gif)")
-        # print(r)
         imagePath = r[0]
         if not imagePath:
             return
