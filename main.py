@@ -41,7 +41,6 @@ class ArtisticQrcodeGenerator(QWidget):
                                         caption="保存二维码",
                                         dir=f"二维码_{time.strftime('%Y%m%d%H%M%S')}.{ext}",
                                         filter=f"图片 (*.{ext})")
-        # print(r)
         imagePath = r[0]
         if not imagePath:
             return
