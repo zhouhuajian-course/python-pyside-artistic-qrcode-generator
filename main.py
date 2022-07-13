@@ -6,6 +6,7 @@
 """
 import time
 
+from PySide6.QtCore import QFile
 from PySide6.QtGui import QMouseEvent, Qt, QPixmap, QMovie
 from PySide6.QtWidgets import QWidget, QApplication, QFileDialog, QMessageBox
 
@@ -31,6 +32,7 @@ class ArtisticQrcodeGenerator(QWidget):
         # 保存二维码
         self.qrcodePath = "images/default_qrcode.png"
         self.ui.qrcodeLabel.mousePressEvent = self.saveQrcode
+        self.file = QFile()
 
     def saveQrcode(self, mouseEvent: QMouseEvent):
         """保存二维码"""
@@ -45,6 +47,8 @@ class ArtisticQrcodeGenerator(QWidget):
         if not imagePath:
             return
         print("二维码保存到了" + imagePath)
+        self.file.copy(self.qrcodePath, imagePath)
+        QMessageBox.information(self, "提示", "二维码保存成功")
 
     def createQrcode(self):
         """创建二维码"""
